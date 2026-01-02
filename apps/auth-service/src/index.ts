@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { clerkMiddleware, getAuth } from "@clerk/express";
-import { shouldBeUser } from "./middleware/authMiddleware.js";
-import productRouter from "./routes/product.route.js";
-import categoryRouter from "./routes/category.route.js";
-import { consumer, producer } from "./utils/kafka.js";
+import { clerkMiddleware } from "@clerk/express";
+import { shouldBeAdmin } from "./middleware/authMiddleware";
+import userRoute from "./routes/user.route";
+import { producer } from "./utils/kafka";
+
 const app = express();
-const port = 8000;
+const port = 8003;
 
 app.use(
     cors({
@@ -26,17 +26,7 @@ app.get("/health", (req: Request, res: Response) => {
     });
 });
 
-app.get("/test", shouldBeUser, (req: Request, res: Response) => {
-    const auth = getAuth(req);
-    const userId = auth.userId;
-    if (!userId) {
-        return res.status(401).json({ error: "Unauthorized" });
-    }
-    res.json({ message: "This is a test endpoint.", userId: req.userId });
-});
-
-app.use("/products", productRouter);
-app.use("/categories", categoryRouter);
+app.use("/users", shouldBeAdmin, userRoute);
 
 app.use((err: any, req: Request, res: Response, next: any) => {
     console.error(err.stack);
@@ -47,11 +37,9 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 
 const start = async () => {
     try {
-        Promise.all([await producer.connect(), await consumer.connect()]);
+        await producer.connect();
         app.listen(port, () => {
-            console.log(
-                `Product service is running at http://localhost:${port}`
-            );
+            console.log(`Auth service is running at http://localhost:${port}`);
         });
     } catch (err) {
         console.error("Failed to start the server:", err);
