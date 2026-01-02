@@ -32,7 +32,25 @@ export const getStripeProductPrice = async (productId: number | string) => {
 
 export const deleteStripeProduct = async (productId: number | string) => {
     try {
-        const res = await stripe.products.del(String(productId));
+        // First, remove the default price from the product
+        await stripe.products.update(String(productId), {
+            default_price: "",
+        });
+
+        // Get all prices for this product
+        const prices = await stripe.prices.list({
+            product: String(productId),
+        });
+
+        // Archive all prices
+        for (const price of prices.data) {
+            await stripe.prices.update(price.id, { active: false });
+        }
+
+        // Finally, archive the product
+        const res = await stripe.products.update(String(productId), {
+            active: false,
+        });
         return res;
     } catch (error) {
         console.error("Error deleting Stripe product:", error);

@@ -7,15 +7,13 @@ export const runKafkaSubscriptions = async () => {
             topicName: "product.created",
             topicHandler: async (message) => {
                 const product = message.value;
-                console.log("Received product.created event:", product);
-                await createStripeProduct(product);
+                await createStripeProduct({...product, price: product.price * 100});
             },
         },
         {
             topicName: "product.deleted",
             topicHandler: async (message) => {
                 const id = message.value;
-                console.log("Received product.deleted event:", id);
                 await deleteStripeProduct(id);
             },
         },
