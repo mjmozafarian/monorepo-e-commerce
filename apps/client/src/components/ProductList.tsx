@@ -155,12 +155,12 @@ const fetchProducts = async ({
     params,
 }: {
     category?: string;
-    sort?: "price_asc" | "price_desc" | "newest";
+    sort?: "asc" | "desc" | "newest";
     search?: string;
     params: "homepage" | "products";
 }) => {
     const res = await fetch(
-        `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products?${category ? `category=${category}` : ""}&sort=${sort || `newest`}${search ? `&search=${search}` : ""}${
+        `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products?${category && category !== "all" ? `category=${category}` : ""}&sort=${sort || `newest`}${search ? `&search=${search}` : ""}${
             params === "homepage" ? "&limit=8" : ""
         }`
     );
@@ -176,7 +176,7 @@ const ProductList = async ({
     params,
 }: {
     category: string;
-    sort?: "price_asc" | "price_desc" | "newest";
+    sort?: "asc" | "desc" | "newest";
     search?: string;
     params: "homepage" | "products";
 }) => {

@@ -5,7 +5,7 @@ const ProductsPage = async ({
 }: {
     searchParams: Promise<{
         category?: string;
-        sort?: "price_asc" | "price_desc" | "newest";
+        sort?: "asc" | "desc" | "newest";
         search?: string;
     }>;
 }) => {
