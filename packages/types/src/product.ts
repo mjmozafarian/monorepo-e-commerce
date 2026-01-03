@@ -35,6 +35,8 @@ export const colors = [
     "purple",
     "brown",
     "gray",
+    "pink",
+    "orange",
 ] as const;
 
 export const ProductFormSchema = z

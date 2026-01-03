@@ -33,6 +33,7 @@ import { CategoryType, colors, ProductFormSchema, sizes } from "@repo/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const fetchCategories = async () => {
     const response = await fetch(
@@ -62,7 +63,7 @@ const AddProduct = () => {
         queryKey: ["categories"],
         queryFn: fetchCategories,
     });
-
+    const router = useRouter();
     const { getToken } = useAuth();
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof ProductFormSchema>) => {
@@ -84,6 +85,7 @@ const AddProduct = () => {
         },
         onSuccess: () => {
             toast.success("Product added successfully");
+            router.refresh();
         },
         onError: () => {
             toast.error("Failed to add product");

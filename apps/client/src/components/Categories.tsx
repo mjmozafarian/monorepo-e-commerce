@@ -1,14 +1,13 @@
 "use client";
 import {
     Footprints,
-    Glasses,
     Briefcase,
     Shirt,
     ShoppingBasket,
-    Hand,
     Venus,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PiHoodieBold, PiShirtFolded } from "react-icons/pi";
 
 const categories = [
     {
@@ -22,14 +21,19 @@ const categories = [
         slug: "t-shirts",
     },
     {
+        name: "Shirts",
+        icon: <PiShirtFolded className="w-4 h-4" />,
+        slug: "shirts",
+    },
+    {
+        name: "Sweashirts",
+        icon: <PiHoodieBold className="w-4 h-4" />,
+        slug: "sweashirts",
+    },
+    {
         name: "Shoes",
         icon: <Footprints className="w-4 h-4" />,
         slug: "shoes",
-    },
-    {
-        name: "Accessories",
-        icon: <Glasses className="w-4 h-4" />,
-        slug: "accessories",
     },
     {
         name: "Bags",
@@ -45,11 +49,6 @@ const categories = [
         name: "Jackets",
         icon: <Shirt className="w-4 h-4" />,
         slug: "jackets",
-    },
-    {
-        name: "Gloves",
-        icon: <Hand className="w-4 h-4" />,
-        slug: "gloves",
     },
 ];
 const Categories = () => {

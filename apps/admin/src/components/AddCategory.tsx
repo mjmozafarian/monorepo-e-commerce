@@ -23,6 +23,7 @@ import { categoryFormSchema } from "@repo/types";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const AddCategory = () => {
     const form = useForm<z.infer<typeof categoryFormSchema>>({
@@ -32,6 +33,7 @@ const AddCategory = () => {
             slug: "",
         },
     });
+    const router = useRouter();
     const { getToken } = useAuth();
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof categoryFormSchema>) => {
@@ -53,6 +55,7 @@ const AddCategory = () => {
         },
         onSuccess: () => {
             toast.success("Category added successfully");
+            router.refresh();
         },
         onError: () => {
             toast.error("Failed to add category");
