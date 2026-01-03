@@ -7,7 +7,11 @@ export const runKafkaSubscriptions = async () => {
             topicName: "product.created",
             topicHandler: async (message) => {
                 const product = message.value;
-                await createStripeProduct({...product, price: product.price * 100});
+                console.log("Received product.created event:", product);
+                await createStripeProduct({
+                    ...product,
+                    price: product.price * 100,
+                });
             },
         },
         {

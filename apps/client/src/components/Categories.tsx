@@ -1,13 +1,12 @@
 "use client";
-import {
-    Footprints,
-    Briefcase,
-    Shirt,
-    ShoppingBasket,
-    Venus,
-} from "lucide-react";
+import { Footprints, Briefcase, Shirt, ShoppingBasket } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { PiHoodieBold, PiShirtFolded } from "react-icons/pi";
+import {
+    PiDressBold,
+    PiHoodieBold,
+    PiPantsBold,
+    PiShirtFoldedBold,
+} from "react-icons/pi";
 
 const categories = [
     {
@@ -22,13 +21,13 @@ const categories = [
     },
     {
         name: "Shirts",
-        icon: <PiShirtFolded className="w-4 h-4" />,
+        icon: <PiShirtFoldedBold className="w-4 h-4" />,
         slug: "shirts",
     },
     {
-        name: "Sweashirts",
+        name: "Sweatshirts",
         icon: <PiHoodieBold className="w-4 h-4" />,
-        slug: "sweashirts",
+        slug: "sweatshirts",
     },
     {
         name: "Shoes",
@@ -36,19 +35,19 @@ const categories = [
         slug: "shoes",
     },
     {
-        name: "Bags",
-        icon: <Briefcase className="w-4 h-4" />,
-        slug: "bags",
-    },
-    {
         name: "Dresses",
-        icon: <Venus className="w-4 h-4" />,
+        icon: <PiDressBold className="w-4 h-4" />,
         slug: "dresses",
     },
     {
-        name: "Jackets",
-        icon: <Shirt className="w-4 h-4" />,
-        slug: "jackets",
+        name: "Trousers",
+        icon: <PiPantsBold className="w-4 h-4" />,
+        slug: "trousers",
+    },
+    {
+        name: "Bags",
+        icon: <Briefcase className="w-4 h-4" />,
+        slug: "bags",
     },
 ];
 const Categories = () => {

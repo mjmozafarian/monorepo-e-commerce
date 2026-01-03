@@ -31,7 +31,6 @@ export const createProduct = async (req: Request, res: Response) => {
         name: product.name,
         price: product.price,
     };
-    producer.send("product.created", { value: stripeProduct });
     res.status(201).json(product);
 };
 export const updateProduct = async (req: Request, res: Response) => {

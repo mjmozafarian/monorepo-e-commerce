@@ -67,6 +67,7 @@ const AddProduct = () => {
     const { getToken } = useAuth();
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof ProductFormSchema>) => {
+            console.log("Submitting data:", data);
             const token = await getToken();
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products`,
@@ -171,11 +172,11 @@ const AddProduct = () => {
                                                 type="number"
                                                 placeholder="100"
                                                 {...field}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
                                                     field.onChange(
                                                         Number(e.target.value)
-                                                    )
-                                                }
+                                                    );
+                                                }}
                                             />
                                         </FormControl>
                                         <FormDescription>
