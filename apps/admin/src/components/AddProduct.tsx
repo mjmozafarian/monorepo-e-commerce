@@ -67,7 +67,6 @@ const AddProduct = () => {
     const { getToken } = useAuth();
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof ProductFormSchema>) => {
-            console.log("Submitting data:", data);
             const token = await getToken();
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products`,
@@ -441,9 +440,6 @@ const AddProduct = () => {
                                                                                         [color]:
                                                                                             data.secure_url,
                                                                                     }
-                                                                                );
-                                                                                toast.success(
-                                                                                    `${color} image uploaded successfully`
                                                                                 );
                                                                             }
                                                                         } catch (err) {

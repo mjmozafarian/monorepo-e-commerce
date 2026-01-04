@@ -3,14 +3,18 @@ import stripe from "./stripe";
 
 export const createStripeProduct = async (item: StripeProductType) => {
     try {
+        // Convert price from dollars to cents (Stripe expects integer in cents)
+        const priceInCents = Math.round(item.price * 100);
+
         const res = await stripe.products.create({
             id: item.id,
             name: item.name,
             default_price_data: {
                 currency: "usd",
-                unit_amount: item.price,
+                unit_amount: priceInCents,
             },
         });
+        console.log("Stripe product created:", res);
         return res;
     } catch (error) {
         console.error("Error creating Stripe product:", error);
