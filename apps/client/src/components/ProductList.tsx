@@ -3,6 +3,7 @@ import Categories from "./Categories";
 import ProductCard from "./ProductCard";
 import Link from "next/link";
 import Filter from "./Filter";
+import NotFound from "./NotFound";
 
 //TEMPORARY
 // const products: ProductsType = [
@@ -181,6 +182,9 @@ const ProductList = async ({
     params: "homepage" | "products";
 }) => {
     const products = await fetchProducts({ category, sort, search, params });
+    if (products.length === 0) {
+        return <NotFound type="product" />;
+    }
     return (
         <div className="w-full">
             <Categories />

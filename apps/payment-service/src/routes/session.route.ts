@@ -3,7 +3,6 @@ import stripe from "../utils/stripe";
 import { shouldBeUser } from "../middleware/authMiddleware";
 import { CartItemsType } from "@repo/types";
 import { getStripeProductPrice } from "../utils/stripeProducts";
-import { stat } from "fs";
 
 const sessionRoute = new Hono();
 
