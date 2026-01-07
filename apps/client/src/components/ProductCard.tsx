@@ -52,9 +52,11 @@ const ProductCard = ({ product }: { product: ProductType }) => {
             </Link>
             {/*Product details*/}
             <div className="flex flex-col gap-4 p-4">
-                <h1 className="font-medium">{product.name}</h1>
+                <Link href={`/products/${product.id}`}>
+                    <h1 className="font-medium">{product.name}</h1>
+                </Link>
                 <p className="text-sm text-gray-500">
-                    ${product.shortDescription}
+                    {product.shortDescription}
                 </p>
                 {/* PRODUCT TYPES */}
                 <div className="flex items-center gap-4 text-xs">
