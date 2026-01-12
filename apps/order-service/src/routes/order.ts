@@ -27,6 +27,17 @@ export const orderRoute = async (fastify: FastifyInstance) => {
     );
 
     fastify.get(
+        "/orders/:id",
+        { preHandler: shouldBeUser },
+        async (request, reply) => {
+            console.log("Fetching order details");
+            const { id } = request.params as { id: string };
+            const order = await Order.findById(id);
+            return reply.send(order);
+        }
+    );
+
+    fastify.get(
         "/order-chart",
         { preHandler: shouldBeAdmin },
         async (request, reply) => {

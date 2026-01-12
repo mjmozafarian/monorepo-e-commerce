@@ -3,6 +3,7 @@ import Link from "next/link";
 
 const OrderCard = ({ order }: { order: OrderType }) => {
     const statusColor = order.status === "success" ? "#34D399" : "#F87171"; // Tailwind's emerald-400 color for success, red-400 for others
+    const createdAt =order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "N/A";
     return (
         <li className="bg-background rounded-lg border p-4 shadow-sm transition-shadow duration-300 hover:shadow-md border-gray-900/10">
             <div className="mb-3 flex items-start justify-between">
@@ -13,12 +14,12 @@ const OrderCard = ({ order }: { order: OrderType }) => {
                     >
                         {order._id}
                     </p>
-                    {/* <p
+                    <p
                         className="text-muted-foreground mt-1 text-xs"
-                        title={`Order placed on ${formattedDate}`}
+                        title={`Order placed on ${createdAt}`}
                     >
-                        {formattedDate}
-                    </p> */}
+                        {createdAt}
+                    </p>
                 </div>
                 <span
                     className="inline-block rounded px-2 py-1 text-xs font-semibold"
