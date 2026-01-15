@@ -59,12 +59,15 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                     </span>
                 </p>
             </div>
-            <div className="grid sm:grid-cols-3 gap-4 mt-4">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
                 {order.products.map((item) => (
                     <OrderItemCard
                         name={item.name}
                         quantity={item.quantity}
                         price={item.price}
+                        size={item.size}
+                        color={item.color}
+                        image={item.image}
                         key={String(item._id)}
                     />
                 ))}

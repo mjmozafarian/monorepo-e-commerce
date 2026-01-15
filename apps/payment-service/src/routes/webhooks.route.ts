@@ -24,16 +24,20 @@ webHooksRoute.post("/stripe", async (c) => {
                 session.id
             );
             //TODO: Create order in DB
+            const metadata = JSON.parse(session.metadata?.cart || "[]");
             await producer.send("payment.successful", {
                 userId: session.client_reference_id,
                 email: session.customer_details?.email,
                 amount: session.amount_total,
                 status:
                     session.payment_status === "paid" ? "success" : "failed",
-                products: lineItems.data.map((item) => ({
+                products: lineItems.data.map((item, index) => ({
                     name: item.description,
                     price: item.price?.unit_amount,
                     quantity: item.quantity,
+                    size: metadata[index]?.size || "",
+                    color: metadata[index]?.color || "",
+                    image: metadata[index]?.image || "",
                 })),
             });
             console.log("✅ Sent payment.successful event to Kafka");

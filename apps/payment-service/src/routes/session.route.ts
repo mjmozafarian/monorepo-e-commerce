@@ -26,6 +26,13 @@ sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
             };
         })
     );
+    // Prepare cart metadata for order creation (size, color, image)
+    const cartMetadata = cart.map((item) => ({
+        size: item.selectedSize,
+        color: item.selectedColor,
+        image:
+            (item.images as Record<string, string>)?.[item.selectedColor] || "",
+    }));
     try {
         const session = await stripe.checkout.sessions.create({
             line_items: lineItems,
@@ -34,6 +41,9 @@ sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
             ui_mode: "custom",
             return_url:
                 "http://localhost:3001/return?session_id={CHECKOUT_SESSION_ID}",
+            metadata: {
+                cart: JSON.stringify(cartMetadata),
+            },
         });
         return c.json({ checkoutSessionClientSecret: session.client_secret });
     } catch (error) {
