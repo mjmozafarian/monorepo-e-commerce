@@ -54,7 +54,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                     Created at:{" "}
                     <span className="font-semibold">
                         {order.createdAt
-                            ? new Date(order.createdAt).toLocaleDateString()
+                            ? new Date(order.createdAt).toDateString()
                             : "N/A"}
                     </span>
                 </p>

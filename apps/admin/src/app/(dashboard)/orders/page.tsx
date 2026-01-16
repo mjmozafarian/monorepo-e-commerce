@@ -8,7 +8,7 @@ const getData = async (): Promise<OrderType[]> => {
         const { getToken } = await auth();
         const token = await getToken();
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_ORDER_SERVICE_URL}/payments`,
+            `${process.env.NEXT_PUBLIC_ORDER_SERVICE_URL}/orders`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

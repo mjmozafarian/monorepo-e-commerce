@@ -21,6 +21,11 @@ import {
 import { DataTablePagination } from "@/components/TablePagination";
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
+import { useAuth } from "@clerk/nextjs";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { OrderType } from "@repo/types";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -45,13 +50,51 @@ export function DataTable<TData, TValue>({
         onRowSelectionChange: setRowSelection,
     });
 
+    const { getToken } = useAuth();
+    const router = useRouter();
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const token = await getToken();
+            const selectedRows = table.getSelectedRowModel().rows;
+            await Promise.all(
+                selectedRows.map(async (row) => {
+                    const orderId = (row.original as OrderType)._id;
+                    const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_ORDER_SERVICE_URL}/orders/${orderId}`,
+                        {
+                            method: "DELETE",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+                    console.log("Delete response:", response);
+                    if (!response.ok) {
+                        throw new Error("Failed to delete order");
+                    }
+                })
+            );
+        },
+        onSuccess: () => {
+            toast.success("Order(s) deleted successfully");
+            router.refresh();
+        },
+        onError: () => {
+            toast.error("Failed to delete order(s)");
+        },
+    });
+
     return (
         <div className="overflow-hidden rounded-md border">
             {Object.keys(rowSelection).length > 0 && (
                 <div className="flex justify-end">
-                    <button className="px-2 py-1 flex items-center gap-2 bg-red-500 text-white text-sm rounded-md m-4 cursor-pointer">
+                    <button
+                        className="px-2 py-1 flex items-center gap-2 bg-red-500 text-white text-sm rounded-md m-4 cursor-pointer"
+                        onClick={() => mutation.mutate()}
+                        disabled={mutation.isPending}
+                    >
                         <Trash2 className="size-4" />
-                        Delete Payment(s)
+                        Delete Order(s)
                     </button>
                 </div>
             )}

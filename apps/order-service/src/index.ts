@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import cors from "@fastify/cors";
 import { clerkPlugin } from "@clerk/fastify";
 import { shouldBeUser } from "./middleware/authMiddleware.js";
 import { connectOrderDB } from "@repo/order-db";
@@ -6,6 +7,12 @@ import { orderRoute } from "./routes/order.js";
 import { consumer, producer } from "./utils/kafka.js";
 import { runKafkaSubscriptions } from "./utils/subscriptions.js";
 const fastify = Fastify();
+
+fastify.register(cors, {
+    origin: ["http://localhost:3001", "http://localhost:3002"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+});
 
 fastify.register(clerkPlugin);
 fastify.get("/health", (request, reply) => {

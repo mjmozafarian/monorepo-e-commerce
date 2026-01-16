@@ -37,6 +37,17 @@ export const orderRoute = async (fastify: FastifyInstance) => {
         }
     );
 
+    fastify.delete(
+        "/orders/:id",
+        { preHandler: shouldBeUser },
+        async (request, reply) => {
+            console.log("Deleting order");
+            const { id } = request.params as { id: string };
+            const order = await Order.findByIdAndDelete(id);
+            return reply.send(order);
+        }
+    );
+
     fastify.get(
         "/order-chart",
         { preHandler: shouldBeAdmin },
