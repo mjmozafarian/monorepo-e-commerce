@@ -1,6 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const OrderItemCard = ({
+    productId,
     name,
     quantity,
     price,
@@ -8,6 +10,7 @@ const OrderItemCard = ({
     color,
     image,
 }: {
+    productId: number;
     name: string;
     quantity: number;
     price: number;
@@ -16,24 +19,30 @@ const OrderItemCard = ({
     image: string;
 }) => {
     return (
-        <div className="flex gap-2 border rounded-lg flex-col w-full overflow-hidden">
+        <div className="flex gap-2 border rounded-lg flex-col w-full overflow-hidden hover:shadow-lg transition-shadow">
             {image && (
-                <div className="relative aspect-2/3 w-full">
-                    <Image
-                        src={image}
-                        alt={name}
-                        fill
-                        className="object-cover"
-                    />
-                </div>
+                <Link href={`/products/${productId}`}>
+                    <div className="relative aspect-10/11 w-full">
+                        <Image
+                            src={image}
+                            alt={name}
+                            fill
+                            className="object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
+                </Link>
             )}
             <div className="p-4 space-y-2 font-semibold">
-                <p className="font-medium text-lg">{name}</p>
+                <Link href={`/products/${productId}`}>
+                    <p className="font-medium text-lg hover:underline">
+                        {name}
+                    </p>
+                </Link>
                 <p>Size: {size.toUpperCase()}</p>
-                <p className="flex items-center gap-1">
+                <p className="flex items-center gap-2">
                     <span>Color:</span>
                     <span
-                        className="inline-block w-3 h-3 rounded-full"
+                        className="inline-block size-4 rounded-full border border-gray-300"
                         style={{ backgroundColor: color }}
                     />
                 </p>

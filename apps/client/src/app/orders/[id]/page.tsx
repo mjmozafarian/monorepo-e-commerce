@@ -62,6 +62,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
                 {order.products.map((item) => (
                     <OrderItemCard
+                        productId={item.productId}
                         name={item.name}
                         quantity={item.quantity}
                         price={item.price}

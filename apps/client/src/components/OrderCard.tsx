@@ -3,7 +3,9 @@ import Link from "next/link";
 
 const OrderCard = ({ order }: { order: OrderType }) => {
     const statusColor = order.status === "success" ? "#34D399" : "#F87171"; // Tailwind's emerald-400 color for success, red-400 for others
-    const createdAt =order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "N/A";
+    const createdAt = order.createdAt
+        ? new Date(order.createdAt).toDateString()
+        : "N/A";
     return (
         <li className="bg-background rounded-lg border p-4 shadow-sm transition-shadow duration-300 hover:shadow-md border-gray-900/10">
             <div className="mb-3 flex items-start justify-between">

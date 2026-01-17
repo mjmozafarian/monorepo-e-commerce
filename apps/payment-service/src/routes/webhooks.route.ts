@@ -25,6 +25,34 @@ webHooksRoute.post("/stripe", async (c) => {
             );
             //TODO: Create order in DB
             const metadata = JSON.parse(session.metadata?.cart || "[]");
+            console.log("📦 Cart metadata:", metadata);
+
+            // Fetch product images for each item
+            const productImages = await Promise.all(
+                metadata.map(async (item: { p: number; c: string }) => {
+                    try {
+                        const url = `${process.env.PUBLIC_PRODUCT_SERVICE_URL}/products/${item.p}`;
+                        console.log("🔍 Fetching product from:", url);
+                        const res = await fetch(url);
+                        console.log("📥 Response status:", res.status);
+                        if (res.ok) {
+                            const product = await res.json();
+                            console.log("🖼️ Product images:", product.images);
+                            console.log("🎨 Selected color:", item.c);
+                            const image = product.images?.[item.c] || "";
+                            console.log("✅ Image found:", image);
+                            return image;
+                        }
+                        console.log("❌ Fetch failed with status:", res.status);
+                        return "";
+                    } catch (error) {
+                        console.log("❌ Fetch error:", error);
+                        return "";
+                    }
+                })
+            );
+            console.log("🖼️ All product images:", productImages);
+
             await producer.send("payment.successful", {
                 userId: session.client_reference_id,
                 email: session.customer_details?.email,
@@ -32,12 +60,13 @@ webHooksRoute.post("/stripe", async (c) => {
                 status:
                     session.payment_status === "paid" ? "success" : "failed",
                 products: lineItems.data.map((item, index) => ({
+                    productId: metadata[index]?.p || 0,
                     name: item.description,
                     price: item.price?.unit_amount,
                     quantity: item.quantity,
-                    size: metadata[index]?.size || "",
-                    color: metadata[index]?.color || "",
-                    image: metadata[index]?.image || "",
+                    size: metadata[index]?.s || "",
+                    color: metadata[index]?.c || "",
+                    image: productImages[index] || "",
                 })),
             });
             console.log("✅ Sent payment.successful event to Kafka");

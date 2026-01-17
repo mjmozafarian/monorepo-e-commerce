@@ -26,12 +26,11 @@ sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
             };
         })
     );
-    // Prepare cart metadata for order creation (size, color, image)
+    // Prepare cart metadata for order creation (minimal data to stay under 500 chars)
     const cartMetadata = cart.map((item) => ({
-        size: item.selectedSize,
-        color: item.selectedColor,
-        image:
-            (item.images as Record<string, string>)?.[item.selectedColor] || "",
+        p: item.id, // productId (shortened key)
+        s: item.selectedSize,
+        c: item.selectedColor,
     }));
     try {
         const session = await stripe.checkout.sessions.create({
